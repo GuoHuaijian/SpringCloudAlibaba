@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/spring-cloud-alibaba.iml" filepath="$PROJECT_DIR$/.idea/spring-cloud-alibaba.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-common/spring-cloud-alibaba-common.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-common/spring-cloud-alibaba-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-feign/spring-cloud-alibaba-feign.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-feign/spring-cloud-alibaba-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-nacos-config/spring-cloud-alibaba-nacos-config.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-nacos-config/spring-cloud-alibaba-nacos-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-provider/spring-cloud-alibaba-provider.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-provider/spring-cloud-alibaba-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-providertwo/spring-cloud-alibaba-providertwo.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-providertwo/spring-cloud-alibaba-providertwo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-consumer/spring-cloud-alibaba-rocketmq-consumer.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-consumer/spring-cloud-alibaba-rocketmq-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-provider/spring-cloud-alibaba-rocketmq-provider.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-provider/spring-cloud-alibaba-rocketmq-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-skywalking/spring-cloud-alibaba-skywalking.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-skywalking/spring-cloud-alibaba-skywalking.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="spring-cloud-alibaba-skywalking" />
+        <module name="spring-cloud-alibaba-nacos-config" />
+        <module name="spring-cloud-alibaba-consumer" />
+        <module name="spring-cloud-alibaba-feign" />
+        <module name="spring-cloud-alibaba-providertwo" />
+        <module name="spring-cloud-alibaba-gateway" />
+        <module name="spring-cloud-alibaba-provider" />
+        <module name="spring-cloud-alibaba-rocketmq-provider" />
+        <module name="spring-cloud-alibaba-common" />
+        <module name="spring-cloud-alibaba-rocketmq-consumer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-cloud-alibaba" target="1.8" />
+      <module name="spring-cloud-alibaba-common" target="1.8" />
+      <module name="spring-cloud-alibaba-consumer" target="1.8" />
+      <module name="spring-cloud-alibaba-feign" target="1.8" />
+      <module name="spring-cloud-alibaba-gateway" target="1.8" />
+      <module name="spring-cloud-alibaba-nacos-config" target="1.8" />
+      <module name="spring-cloud-alibaba-provider" target="1.8" />
+      <module name="spring-cloud-alibaba-providertwo" target="1.8" />
+      <module name="spring-cloud-alibaba-rocketmq-consumer" target="1.8" />
+      <module name="spring-cloud-alibaba-rocketmq-provider" target="1.8" />
+      <module name="spring-cloud-alibaba-skywalking" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-cloud-alibaba-common" options="-parameters" />
+      <module name="spring-cloud-alibaba-consumer" options="-parameters" />
+      <module name="spring-cloud-alibaba-feign" options="-parameters" />
+      <module name="spring-cloud-alibaba-gateway" options="-parameters" />
+      <module name="spring-cloud-alibaba-nacos-config" options="-parameters" />
+      <module name="spring-cloud-alibaba-provider" options="-parameters" />
+      <module name="spring-cloud-alibaba-providertwo" options="-parameters" />
+      <module name="spring-cloud-alibaba-rocketmq-consumer" options="-parameters" />
+      <module name="spring-cloud-alibaba-rocketmq-provider" options="-parameters" />
+      <module name="spring-cloud-alibaba-skywalking" options="-parameters" />
+    </option>
+  </component>
+</project>

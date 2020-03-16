@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-feign" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/src/main/resources/application.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-nacos-config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-provider" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-providertwo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-consumer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-rocketmq-provider" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-skywalking" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
