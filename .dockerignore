@@ -1,0 +1,12 @@
+# Docker 构建上下文排除（仓库根目录为 context）
+.git
+.github
+.idea
+.vscode
+**/target
+**/node_modules
+.flattened-pom.xml
+**/.flattened-pom.xml
+sloth-boot-ui
+docs
+*.md

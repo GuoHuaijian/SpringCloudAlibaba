@@ -141,6 +141,18 @@
     </modules>
 
     <build>
+        <plugins>
+            <!--
+              Flatten POM：解析 ${revision} 等 CI-friendly 属性。
+              未激活时，install/deploy 到仓库的 POM 保留 ${revision} 字面量，
+              外部项目（或本机单模块构建）无法解析依赖。
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
         <pluginManagement>
             <plugins>
                 <!-- Maven 编译插件 -->
@@ -228,7 +240,12 @@
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>${flatten-maven-plugin.version}</version>
                     <configuration>
-                        <flattenMode>oss</flattenMode>
+                        <!--
+                          只解析 ${revision}/${sha1}/${changelist} 三个 CI-friendly 变量，保留其余全部结构。
+                          oss/defaults 模式会剥离 parent/dependencyManagement/properties/modules，
+                          导致 BOM 与父链在会话内级联失效，不适用本项目。
+                        -->
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
                         <updatePomFile>true</updatePomFile>
                     </configuration>
                     <executions>
