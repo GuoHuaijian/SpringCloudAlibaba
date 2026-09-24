@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
@@ -58,7 +59,15 @@ public abstract class AbstractWebhookAlarmService implements AlarmService {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        restTemplate.postForEntity(buildWebhookUrl(webhook, message), new HttpEntity<>(buildPayload(message), headers), String.class);
+        try {
+            restTemplate.postForEntity(buildWebhookUrl(webhook, message),
+                new HttpEntity<>(buildPayload(message), headers), String.class);
+        } catch (RestClientException ex) {
+            // 告警为旁路能力，失败不能影响主流程；Webhook URL 可能携带签名/token，
+            // 异常信息可能回显完整 URL，故只记录异常类型与告警标题，不输出 URL 与异常报文
+            log.error("[Monitor] 告警发送失败, title={}, errorType={}",
+                message.getTitle(), ex.getClass().getSimpleName());
+        }
     }
 
     protected String buildWebhookUrl(String webhook, AlarmMessage message) {

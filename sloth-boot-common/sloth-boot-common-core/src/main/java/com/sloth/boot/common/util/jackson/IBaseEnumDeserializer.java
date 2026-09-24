@@ -41,7 +41,7 @@ public class IBaseEnumDeserializer extends ValueDeserializer<IBaseEnum> {
             throw ctxt.weirdStringException(p.getText(), Object.class, "类型不是 IBaseEnum 枚举");
         }
 
-        int code = readCode(p);
+        int code = readCode(p, ctxt, targetClass);
         for (Object enumConstant : targetClass.getEnumConstants()) {
             IBaseEnum baseEnum = (IBaseEnum) enumConstant;
             if (baseEnum.getCode() == code) {
@@ -59,24 +59,58 @@ public class IBaseEnumDeserializer extends ValueDeserializer<IBaseEnum> {
         return contextualType != null ? contextualType.getRawClass() : null;
     }
 
-    private int readCode(JsonParser p) {
+    /**
+     * 读取枚举 code。对象格式缺失 code、code 为 null 或类型非法时快速失败，
+     * 避免静默落入 0 值枚举造成数据错误。
+     *
+     * @param p           JSON 解析器
+     * @param ctxt        反序列化上下文
+     * @param targetClass 目标枚举类型
+     * @return 枚举 code
+     */
+    private int readCode(JsonParser p, DeserializationContext ctxt, Class<?> targetClass) {
         if (p.currentToken() == JsonToken.START_OBJECT) {
-            return readCodeFromObject(p);
+            return readCodeFromObject(p, ctxt, targetClass);
         }
-        return p.getValueAsInt();
+        return readScalarCode(p, ctxt, targetClass);
     }
 
-    private int readCodeFromObject(JsonParser p) {
+    private int readCodeFromObject(JsonParser p, DeserializationContext ctxt, Class<?> targetClass) {
+        boolean codeFound = false;
         int code = 0;
-        while (p.nextToken() != JsonToken.END_OBJECT) {
+        JsonToken token;
+        while ((token = p.nextToken()) != JsonToken.END_OBJECT) {
+            if (token != JsonToken.PROPERTY_NAME) {
+                throw ctxt.weirdStringException(String.valueOf(p.getText()), targetClass, "非法的枚举对象格式");
+            }
             String fieldName = p.currentName();
             p.nextToken();
             if (CODE_FIELD.equals(fieldName)) {
-                code = p.getValueAsInt();
+                code = readScalarCode(p, ctxt, targetClass);
+                codeFound = true;
             } else {
                 p.skipChildren();
             }
         }
+        if (!codeFound) {
+            throw ctxt.weirdStringException(String.valueOf(p.getText()), targetClass, "对象格式缺少 code 字段");
+        }
         return code;
+    }
+
+    private int readScalarCode(JsonParser p, DeserializationContext ctxt, Class<?> targetClass) {
+        JsonToken token = p.currentToken();
+        if (token == JsonToken.VALUE_NUMBER_INT) {
+            return p.getValueAsInt();
+        }
+        if (token == JsonToken.VALUE_STRING) {
+            String text = p.getText().trim();
+            try {
+                return Integer.parseInt(text);
+            } catch (NumberFormatException ex) {
+                throw ctxt.weirdStringException(text, targetClass, "枚举 code 不是合法的整数");
+            }
+        }
+        throw ctxt.weirdStringException(String.valueOf(p.getText()), targetClass, "不支持的枚举 code 类型");
     }
 }

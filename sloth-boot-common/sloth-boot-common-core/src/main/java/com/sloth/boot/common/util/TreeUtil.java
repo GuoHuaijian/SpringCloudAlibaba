@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import com.sloth.boot.common.base.TreeNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 树形结构工具类
@@ -21,7 +21,10 @@ public final class TreeUtil {
     }
 
     /**
-     * 构建树形结构
+     * 构建树形结构。
+     * <p>
+     * 父节点缺失（孤儿）或自引用的节点会被提升为根节点，避免数据被静默丢弃；
+     * 节点 ID 重复视为非法输入，快速失败。
      *
      * @param list   节点列表
      * @param rootId 根节点ID
@@ -33,25 +36,32 @@ public final class TreeUtil {
             return new ArrayList<>();
         }
 
-        // 转换为 Map，方便查找
-        Map<Long, T> nodeMap = list.stream().collect(Collectors.toMap(TreeNode::getId, node -> node));
+        // 转换为 Map，方便查找；重复 ID 快速失败
+        Map<Long, T> nodeMap = new HashMap<>(list.size());
+        for (T node : list) {
+            T previous = nodeMap.put(node.getId(), node);
+            if (previous != null) {
+                throw new IllegalArgumentException("重复的树节点ID: " + node.getId());
+            }
+            // 清空历史子节点，防止重复构建时子节点不断累积
+            if (node.getChildren() != null) {
+                node.getChildren().clear();
+            }
+        }
 
         // 构建树形结构
         List<T> treeList = new ArrayList<>();
         for (T node : list) {
             Long parentId = node.getParentId();
-            if (parentId == null || parentId.equals(rootId)) {
-                // 根节点
+            T parent = parentId == null ? null : nodeMap.get(parentId);
+            if (parent == null || parent == node || parentId.equals(rootId)) {
+                // 根节点 / 父节点缺失 / 自引用：提升为根，保证节点不丢失
                 treeList.add(node);
             } else {
-                // 子节点，查找父节点
-                T parent = nodeMap.get(parentId);
-                if (parent != null) {
-                    if (parent.getChildren() == null) {
-                        parent.setChildren(new ArrayList<>());
-                    }
-                    parent.getChildren().add(node);
+                if (parent.getChildren() == null) {
+                    parent.setChildren(new ArrayList<>());
                 }
+                parent.getChildren().add(node);
             }
         }
 

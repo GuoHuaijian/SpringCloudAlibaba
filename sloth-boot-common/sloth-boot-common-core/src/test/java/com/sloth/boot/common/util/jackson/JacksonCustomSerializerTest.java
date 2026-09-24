@@ -44,6 +44,37 @@ class JacksonCustomSerializerTest {
     }
 
     @Test
+    @DisplayName("IBaseEnum 支持字符串 code 反序列化")
+    void enumDeserializeStringCode() throws Exception {
+        TestStatus parsed = mapper.readValue("\"1\"", TestStatus.class);
+        assertThat(parsed).isEqualTo(TestStatus.ACTIVE);
+    }
+
+    @Test
+    @DisplayName("IBaseEnum 对象格式缺失 code 时快速失败，不静默落到 0 值枚举")
+    void enumDeserializeObjectMissingCode() {
+        org.assertj.core.api.Assertions
+            .assertThatThrownBy(() -> mapper.readValue("{\"desc\":\"启用\"}", TestStatus.class))
+            .isInstanceOf(tools.jackson.core.JacksonException.class);
+    }
+
+    @Test
+    @DisplayName("IBaseEnum code 为 null 时快速失败")
+    void enumDeserializeNullCode() {
+        org.assertj.core.api.Assertions
+            .assertThatThrownBy(() -> mapper.readValue("{\"code\":null}", TestStatus.class))
+            .isInstanceOf(tools.jackson.core.JacksonException.class);
+    }
+
+    @Test
+    @DisplayName("IBaseEnum 非法字符串 code 时快速失败")
+    void enumDeserializeInvalidStringCode() {
+        org.assertj.core.api.Assertions
+            .assertThatThrownBy(() -> mapper.readValue("\"abc\"", TestStatus.class))
+            .isInstanceOf(tools.jackson.core.JacksonException.class);
+    }
+
+    @Test
     @DisplayName("Long 序列化为字符串，long 保持数字")
     void longAndPrimitiveLongSerialization() throws Exception {
         LongWrapper wrapper = new LongWrapper();

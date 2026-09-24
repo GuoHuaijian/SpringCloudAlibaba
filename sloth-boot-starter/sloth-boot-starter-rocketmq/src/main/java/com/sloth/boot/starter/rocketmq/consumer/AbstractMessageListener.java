@@ -49,18 +49,27 @@ public abstract class AbstractMessageListener<T extends BaseMessage> implements 
     @Override
     public final void onMessage(MessageExt messageExt) {
         long startTime = System.currentTimeMillis();
-        String traceId = TraceMessageInterceptor.restoreTrace(messageExt);
+        TraceMessageInterceptor.restoreTrace(messageExt);
+        T message = null;
+        boolean markedByCurrentConsumer = false;
         try {
-            T message = parseMessage(messageExt);
-            if (needIdempotentCheck(message) && !markConsumed(message)) {
-                log.warn("[MQ] RocketMQ 消息重复消费, topic={}, msgId={}",
-                    messageExt.getTopic(), message.getMsgId());
-                return;
+            message = parseMessage(messageExt);
+            if (needIdempotentCheck(message)) {
+                IdempotentMark mark = markConsumed(message);
+                if (mark == IdempotentMark.DUPLICATE) {
+                    log.warn("[MQ] RocketMQ 消息重复消费, topic={}, msgId={}",
+                        messageExt.getTopic(), message.getMsgId());
+                    return;
+                }
+                markedByCurrentConsumer = mark == IdempotentMark.MARKED;
             }
             onMessage(message);
             log.info("[MQ] RocketMQ 消息消费成功, topic={}, msgId={}, cost={}ms",
                 messageExt.getTopic(), message.getMsgId(), System.currentTimeMillis() - startTime);
         } catch (Exception ex) {
+            if (markedByCurrentConsumer && message != null) {
+                rollbackIdempotentMark(message);
+            }
             int reconsumeTimes = messageExt.getReconsumeTimes();
             log.error("[MQ] RocketMQ 消息消费失败, topic={}, msgId={}, retryTimes={}, maxRetry={}, cost={}ms",
                 messageExt.getTopic(),
@@ -116,13 +125,46 @@ public abstract class AbstractMessageListener<T extends BaseMessage> implements 
         return mqProperties.isIdempotentEnabled() && message != null && message.getMsgId() != null;
     }
 
-    private boolean markConsumed(T message) {
+    private IdempotentMark markConsumed(T message) {
         StringRedisTemplate stringRedisTemplate = stringRedisTemplateProvider.getIfAvailable();
         if (stringRedisTemplate == null) {
-            return true;
+            return IdempotentMark.NOT_MARKED;
         }
         String key = mqProperties.getConsumeIdempotentKeyPrefix() + message.getMsgId();
         Boolean success = stringRedisTemplate.opsForValue().setIfAbsent(key, "1", Duration.ofDays(1));
-        return Boolean.TRUE.equals(success);
+        return Boolean.TRUE.equals(success) ? IdempotentMark.MARKED : IdempotentMark.DUPLICATE;
+    }
+
+    /**
+     * 消费失败时回滚幂等标记，保证消息重试时能被重新处理。
+     *
+     * @param message 业务消息
+     */
+    private void rollbackIdempotentMark(T message) {
+        StringRedisTemplate stringRedisTemplate = stringRedisTemplateProvider.getIfAvailable();
+        if (stringRedisTemplate == null) {
+            return;
+        }
+        try {
+            stringRedisTemplate.delete(mqProperties.getConsumeIdempotentKeyPrefix() + message.getMsgId());
+            log.info("[MQ] 消费失败已回滚幂等标记, msgId={}", message.getMsgId());
+        } catch (RuntimeException ex) {
+            log.warn("[MQ] 回滚幂等标记失败, msgId={}", message.getMsgId(), ex);
+        }
+    }
+
+    /**
+     * 幂等标记结果。
+     */
+    private enum IdempotentMark {
+
+        /** 本次消费成功写入标记。 */
+        MARKED,
+
+        /** 标记已存在，消息重复。 */
+        DUPLICATE,
+
+        /** 无 Redis 可用，未写入标记。 */
+        NOT_MARKED
     }
 }

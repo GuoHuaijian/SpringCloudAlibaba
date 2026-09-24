@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,6 +45,14 @@ class MonitorAutoConfigurationTest {
         contextRunner.withPropertyValues("sloth.monitor.alarm.enabled=true").run(context -> {
             assertThat(context.getBeansOfType(RestTemplate.class)).isNotEmpty();
         });
+    }
+
+    @Test
+    @DisplayName("告警 RestTemplate 使用带超时的请求工厂")
+    void restTemplateUsesTimeoutRequestFactory() {
+        RestTemplate restTemplate = new MonitorAutoConfiguration().restTemplate();
+
+        assertThat(restTemplate.getRequestFactory()).isInstanceOf(SimpleClientHttpRequestFactory.class);
     }
 
     @Test

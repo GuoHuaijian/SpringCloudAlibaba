@@ -110,15 +110,16 @@ public final class NumberUtil {
     }
 
     /**
-     * 元转分
+     * 元转分。按四舍五入保留到分。
      *
      * @param yuan 元
      * @return 分
      * @throws IllegalArgumentException 如果 yuan 为 null
+     * @throws ArithmeticException      如果结果超出 long 表示范围
      */
     public static Long yuan2Fen(BigDecimal yuan) {
         requireNonNull(yuan, "yuan");
-        return yuan.multiply(new BigDecimal(100)).longValue();
+        return yuan.movePointRight(2).setScale(0, RoundingMode.HALF_UP).longValueExact();
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.sloth.boot.starter.sms.core;
 
-import cn.hutool.core.util.IdUtil;
 import com.sloth.boot.starter.sms.config.SmsProperties;
 import com.sloth.boot.starter.sms.model.SendResult;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +30,11 @@ public class AliyunSmsClient implements SmsClient {
      */
     @Override
     public SendResult send(String phone, String templateCode, Map<String, String> params) {
-        String msgId = IdUtil.fastSimpleUUID();
-        log.info("[SMS] 模拟发送阿里云短信, phone={}, signName={}, templateCode={}, params={}, regionId={}",
-            phone, smsProperties.getSignName(), templateCode, params, smsProperties.getRegionId());
+        log.warn("[SMS] 阿里云短信客户端当前为预留实现, phone={}, signName={}, templateCode={}, regionId={}",
+            phone, smsProperties.getSignName(), templateCode, smsProperties.getRegionId());
         return SendResult.builder()
-            .success(true)
-            .msgId(msgId)
-            .message("短信发送成功")
+            .success(false)
+            .message("阿里云短信客户端暂未接入")
             .build();
     }
 
@@ -51,11 +48,10 @@ public class AliyunSmsClient implements SmsClient {
      */
     @Override
     public SendResult batchSend(List<String> phones, String templateCode, Map<String, String> params) {
-        log.info("[SMS] 模拟批量发送阿里云短信, phones={}, templateCode={}, params={}", phones, templateCode, params);
+        log.warn("[SMS] 阿里云批量短信客户端当前为预留实现, phones={}, templateCode={}", phones, templateCode);
         return SendResult.builder()
-            .success(true)
-            .msgId(IdUtil.fastSimpleUUID())
-            .message("批量短信发送成功")
+            .success(false)
+            .message("阿里云短信客户端暂未接入")
             .build();
     }
 }

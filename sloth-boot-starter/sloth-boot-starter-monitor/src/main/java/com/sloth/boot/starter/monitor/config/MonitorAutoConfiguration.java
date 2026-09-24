@@ -33,9 +33,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -59,7 +61,17 @@ import java.util.Set;
 public class MonitorAutoConfiguration {
 
     /**
-     * 注册 RestTemplate。
+     * 告警 Webhook 连接超时。
+     */
+    private static final Duration ALARM_CONNECT_TIMEOUT = Duration.ofSeconds(3);
+
+    /**
+     * 告警 Webhook 读取超时。
+     */
+    private static final Duration ALARM_READ_TIMEOUT = Duration.ofSeconds(5);
+
+    /**
+     * 注册 RestTemplate。必须设置超时，避免告警通道故障时无限期阻塞调用线程。
      *
      * @return RestTemplate
      */
@@ -67,7 +79,10 @@ public class MonitorAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "sloth.monitor.alarm", name = "enabled", havingValue = "true")
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(ALARM_CONNECT_TIMEOUT);
+        requestFactory.setReadTimeout(ALARM_READ_TIMEOUT);
+        return new RestTemplate(requestFactory);
     }
 
     /**
