@@ -7,12 +7,6 @@
       "description": "是否启用线程池 starter。"
     },
     {
-      "name": "sloth.thread-pool.dynamic",
-      "type": "java.lang.Boolean",
-      "defaultValue": true,
-      "description": "是否启用线程池动态配置。"
-    },
-    {
       "name": "sloth.thread-pool.virtual-enabled",
       "type": "java.lang.Boolean",
       "defaultValue": false,
@@ -59,10 +53,22 @@
     {
       "name": "sloth.thread-pool.pools.*.rejected-policy",
       "values": [
-        { "value": "CALLER_RUNS", "description": "由调用线程执行" },
-        { "value": "ABORT", "description": "抛出异常" },
-        { "value": "DISCARD", "description": "静默丢弃" },
-        { "value": "DISCARD_OLDEST", "description": "丢弃最旧任务" }
+        {
+          "value": "CALLER_RUNS",
+          "description": "由调用线程执行"
+        },
+        {
+          "value": "ABORT",
+          "description": "抛出异常"
+        },
+        {
+          "value": "DISCARD",
+          "description": "静默丢弃"
+        },
+        {
+          "value": "DISCARD_OLDEST",
+          "description": "丢弃最旧任务"
+        }
       ]
     }
   ]

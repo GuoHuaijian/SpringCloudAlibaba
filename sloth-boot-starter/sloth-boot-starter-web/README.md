@@ -18,8 +18,8 @@
 | 配置键 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `sloth.web.response-wrapper` | boolean | `true` | 是否启用统一响应包装 |
-| `sloth.web.xss-enabled` | boolean | `true` | 是否启用 XSS 防护 |
-| `sloth.web.xss-exclude-urls` | Set | `[]` | XSS 排除的 URL 列表 |
+| `sloth.xss.enabled` | boolean | `true` | 是否启用 XSS 过滤（common-security） |
+| `sloth.xss.exclude-urls` | Set | `[]` | XSS 过滤排除的 URL 列表（common-security） |
 | `sloth.web.cors.allowed-origins` | Set | `[]` | CORS 允许的来源域名 |
 | `sloth.web.cors.allowed-methods` | List | `GET,POST,PUT,DELETE,OPTIONS` | CORS 允许的 HTTP 方法 |
 | `sloth.web.cors.allowed-headers` | List | `*` | CORS 允许的请求头 |
@@ -110,7 +110,7 @@ sloth:
 A: 在方法或类上添加 `@SkipResponseWrapper` 注解即可。Swagger/Knife4j 文档路径已内置排除。
 
 **Q: XSS 过滤器如何排除特定接口？**
-A: 配置 `sloth.web.xss-exclude-urls`，支持 Ant 风格路径匹配，如 `/api/file/**`。
+A: 配置 `sloth.xss.exclude-urls`，支持 Ant 风格路径匹配，如 `/api/file/**`。
 
 **Q: 全局异常处理器与自定义 `@ExceptionHandler` 会冲突吗？**
 A: 不会。Spring 优先使用 Controller 级别的 `@ExceptionHandler`，`GlobalExceptionHandler` 仅处理未被局部捕获的异常。

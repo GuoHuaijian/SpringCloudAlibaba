@@ -16,8 +16,8 @@
 
 | 配置项 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `sloth.gateway.whiteList` | `Set<String>` | `[]` | 白名单路径列表，匹配前缀跳过认证 |
-| `sloth.gateway.blackList` | `Set<String>` | `[]` | IP 黑名单列表 |
+| `sloth.gateway.white-list` | `Set<String>` | `[]` | 白名单路径列表，匹配前缀跳过认证 |
+| `sloth.gateway.black-list` | `Set<String>` | `[]` | IP 黑名单列表 |
 | `sloth.gateway.dynamic-route-enabled` | `boolean` | `true` | 是否启用动态路由 |
 
 ## 核心组件

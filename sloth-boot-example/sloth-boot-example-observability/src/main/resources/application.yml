@@ -44,12 +44,11 @@ management:
 
 # ===== Sloth Boot 自定义配置 =====
 sloth:
+  # XSS 防护配置
+  xss:
+    enabled: false
   web:
     response-wrapper: true
-    response-wrapper-exclude-urls:
-      - /actuator/**
-      - /h2-console/**
-    xss-enabled: false
     cors:
       allowed-origins:
         - "http://localhost:3000"

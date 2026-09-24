@@ -1,3 +1,58 @@
 {
-  "properties": []
+  "properties": [
+    {
+      "name": "sloth.feign.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "是否启用 Feign Starter。"
+    },
+    {
+      "name": "sloth.feign.connect-timeout",
+      "type": "java.lang.Long",
+      "defaultValue": 5,
+      "description": "连接超时（秒）。"
+    },
+    {
+      "name": "sloth.feign.read-timeout",
+      "type": "java.lang.Long",
+      "defaultValue": 10,
+      "description": "读取超时（秒）。"
+    },
+    {
+      "name": "sloth.feign.write-timeout",
+      "type": "java.lang.Long",
+      "defaultValue": 10,
+      "description": "写入超时（秒）。"
+    },
+    {
+      "name": "sloth.feign.max-idle-connections",
+      "type": "java.lang.Integer",
+      "defaultValue": 200,
+      "description": "连接池最大空闲连接数。"
+    },
+    {
+      "name": "sloth.feign.keep-alive-minutes",
+      "type": "java.lang.Long",
+      "defaultValue": 5,
+      "description": "空闲连接保活时间（分钟）。"
+    },
+    {
+      "name": "sloth.feign.sentinel-enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "是否启用 Sentinel 限流降级集成。"
+    },
+    {
+      "name": "sloth.feign.retry.max-attempts",
+      "type": "java.lang.Integer",
+      "defaultValue": 3,
+      "description": "重试最大尝试次数。"
+    },
+    {
+      "name": "sloth.feign.retry.backoff-ms",
+      "type": "java.lang.Long",
+      "defaultValue": 100,
+      "description": "重试退避间隔（毫秒）。"
+    }
+  ]
 }

@@ -81,7 +81,7 @@ sloth:
 ```yaml
 sloth:
   redis:
-    bloom:
+    bloom-filter:
       enabled: true
       name: "my:bloom:filter"
       expected-insertions: 1000000

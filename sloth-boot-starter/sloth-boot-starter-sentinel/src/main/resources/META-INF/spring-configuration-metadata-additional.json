@@ -17,6 +17,16 @@
       "type": "java.lang.String",
       "defaultValue": "SENTINEL_GROUP",
       "description": "Nacos group id for Sentinel rules."
+    },
+    {
+      "name": "sloth.sentinel.nacos-data-id",
+      "type": "java.lang.String",
+      "description": "Nacos 规则推送的 dataId。"
+    },
+    {
+      "name": "sloth.sentinel.nacos-namespace",
+      "type": "java.lang.String",
+      "description": "Nacos 命名空间 ID。"
     }
   ]
 }

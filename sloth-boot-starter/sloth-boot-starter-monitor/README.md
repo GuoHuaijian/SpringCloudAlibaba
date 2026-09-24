@@ -30,7 +30,6 @@
 | `sloth.monitor.alarm.type` | String | `dingtalk` | 告警类型，`dingtalk` 或 `wechat` |
 | `sloth.monitor.alarm.webhook` | String | - | Webhook 地址 |
 | `sloth.monitor.alarm.secret` | String | - | Webhook 签名密钥（钉钉加签） |
-| `sloth.monitor.tracing-enabled` | boolean | `true` | 是否启用链路追踪桥接 |
 | `sloth.monitor.tracing.enabled` | boolean | `true` | 是否启用链路追踪 |
 | `sloth.monitor.tracing.sampler-rate` | double | `1.0` | 链路采样率（0.0~1.0） |
 
@@ -89,7 +88,6 @@ sloth:
 ```yaml
 sloth:
   monitor:
-    tracing-enabled: true
     tracing:
       sampler-rate: 0.5    # 50% 采样率
 ```

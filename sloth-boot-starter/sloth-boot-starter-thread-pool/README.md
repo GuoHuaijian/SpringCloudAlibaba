@@ -18,7 +18,6 @@
 | 配置键 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `sloth.thread-pool.enabled` | boolean | `true` | 是否启用线程池 Starter |
-| `sloth.thread-pool.dynamic` | boolean | `true` | 是否启用动态配置 |
 | `sloth.thread-pool.virtual-enabled` | boolean | `false` | 是否启用 Java 21 虚拟线程 |
 | `sloth.thread-pool.pools.<name>.core-size` | int | `8` | 核心线程数 |
 | `sloth.thread-pool.pools.<name>.max-size` | int | `32` | 最大线程数 |

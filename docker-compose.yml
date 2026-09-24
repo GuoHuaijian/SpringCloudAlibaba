@@ -4,8 +4,8 @@
 #   - 健康检查: http://localhost:8080/actuator/health
 #   - API 文档: http://localhost:8080/doc.html
 #
-# 安全提示: 生产环境请通过 .env 文件覆盖以下默认密码
-#   MYSQL_ROOT_PASSWORD / MYSQL_PASSWORD
+# 数据说明: 示例服务默认使用内存 H2 数据库；MySQL 容器加载 docs/sql 供本地数据实验
+# 安全提示: 生产环境请通过 .env 文件覆盖 MYSQL_ROOT_PASSWORD
 
 version: '3.8'
 
@@ -18,10 +18,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-sloth}
       MYSQL_DATABASE: sloth_boot
-      MYSQL_CHARSET: utf8mb4
       TZ: Asia/Shanghai
     ports:
-      - "3306:3306"
+      - "${MYSQL_HOST_PORT:-3306}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./docs/sql:/docker-entrypoint-initdb.d
@@ -36,7 +35,7 @@ services:
     image: redis:7-alpine
     container_name: sloth-redis
     ports:
-      - "6379:6379"
+      - "${REDIS_HOST_PORT:-6379}:6379"
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes --requirepass ""
@@ -54,17 +53,12 @@ services:
       dockerfile: sloth-boot-example/sloth-boot-example-service/Dockerfile
     container_name: sloth-example
     ports:
-      - "8080:8080"
+      - "${SLOTH_EXAMPLE_HOST_PORT:-8080}:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      MYSQL_URL: jdbc:mysql://mysql:3306/sloth_boot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-      MYSQL_USERNAME: root
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-sloth}
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
-      mysql:
-        condition: service_healthy
       redis:
         condition: service_healthy
     restart: unless-stopped

@@ -61,10 +61,16 @@
       "description": "多设备登录策略：ALLOW_MULTI / REPLACED / PROHIBIT。"
     },
     {
-      "name": "sloth.auth.blacklist.enabled",
-      "type": "java.lang.Boolean",
-      "defaultValue": false,
-      "description": "是否启用 Token 黑名单（需配合 Redis）。"
+      "name": "sloth.auth.white-list",
+      "type": "java.util.List<java.lang.String>",
+      "defaultValue": [],
+      "description": "认证白名单路径（跳过鉴权），支持 Ant 风格。"
+    },
+    {
+      "name": "sloth.auth.black-list",
+      "type": "java.util.List<java.lang.String>",
+      "defaultValue": [],
+      "description": "认证黑名单路径（直接拒绝访问）。"
     }
   ]
 }

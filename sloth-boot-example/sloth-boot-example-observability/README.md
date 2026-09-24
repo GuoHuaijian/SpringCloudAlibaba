@@ -160,7 +160,7 @@ docker-compose up -d --build
 
 启动后访问：
 
-- Grafana 仪表盘：`http://localhost:3000`（admin / admin）
+- Grafana 仪表盘：`http://localhost:3000`（默认 admin / sloth-grafana，可通过 `GRAFANA_ADMIN_PASSWORD` 覆盖）
 - Prometheus：`http://localhost:9091`
 - Tempo：`http://localhost:3200`
 - Loki：`http://localhost:3100`
@@ -197,7 +197,7 @@ java -javaagent:opentelemetry-javaagent.jar \
    curl -X POST "http://localhost:8080/api/demo/load-test?count=100"
    ```
 
-2. 打开 Grafana（`http://localhost:3000`，admin/admin），预置仪表盘已自动注入：
+2. 打开 Grafana（`http://localhost:3000`，默认 admin / sloth-grafana），预置仪表盘已自动注入：
    - **Sloth HTTP Metrics**：HTTP 请求量、延迟分布、错误率
    - **Sloth JVM Metrics**：堆内存、GC、线程
    - **Sloth Traces**：调用链 NodeGraph / 服务依赖图

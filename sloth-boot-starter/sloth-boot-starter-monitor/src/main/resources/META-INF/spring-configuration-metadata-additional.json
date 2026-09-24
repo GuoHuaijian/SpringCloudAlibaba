@@ -81,14 +81,32 @@
       "type": "java.lang.Double",
       "defaultValue": 1.0,
       "description": "链路采样率，范围 0.0 ~ 1.0。"
+    },
+    {
+      "name": "sloth.monitor.health.connect-timeout",
+      "type": "java.lang.Integer",
+      "defaultValue": 3000,
+      "description": "健康检查连接超时（毫秒）。"
+    },
+    {
+      "name": "sloth.monitor.health.read-timeout",
+      "type": "java.lang.Integer",
+      "defaultValue": 3000,
+      "description": "健康检查读取超时（毫秒）。"
     }
   ],
   "hints": [
     {
       "name": "sloth.monitor.alarm.type",
       "values": [
-        { "value": "dingtalk", "description": "钉钉" },
-        { "value": "wechat", "description": "企业微信" }
+        {
+          "value": "dingtalk",
+          "description": "钉钉"
+        },
+        {
+          "value": "wechat",
+          "description": "企业微信"
+        }
       ]
     }
   ]

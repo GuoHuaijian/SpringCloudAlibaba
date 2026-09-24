@@ -86,11 +86,6 @@ sloth:
   # Web 组件配置
   web:
     response-wrapper: true
-    xss-enabled: true
-    xss-exclude-urls:
-      - /actuator/**
-      - /api/security/**
-      - /api/system/login
     cors:
       allowed-origins:
         - "http://localhost:3000"
@@ -106,6 +101,14 @@ sloth:
       allow-credentials: true
       max-age: 3600
 
+  # XSS 防护配置
+  xss:
+    enabled: true
+    exclude-urls:
+      - /actuator/**
+      - /api/security/**
+      - /api/system/login
+
   # AI 能力配置
   ai:
     enabled: false
@@ -118,9 +121,9 @@ sloth:
   # Redis 能力配置
   redis:
     key-prefix: "example:"
-    bloom:
+    bloom-filter:
       expected-insertions: 10000
-    pubsub:
+    pub-sub:
       enabled: true
 
   # MyBatis 能力配置
@@ -144,7 +147,6 @@ sloth:
 
   # 线程池配置
   thread-pool:
-    dynamic: true
     pools:
       default:
         core-size: 8

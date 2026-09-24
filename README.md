@@ -258,7 +258,7 @@ open http://localhost:8080/doc.html
 ### 5. Docker 一键启动（推荐）
 
 ```bash
-# 一键启动 MySQL + Redis + 示例服务
+# 一键启动 MySQL + Redis + 示例服务（示例服务默认使用内存 H2 数据库）
 docker-compose up -d
 
 # 查看日志
@@ -268,7 +268,7 @@ docker-compose logs -f sloth-example
 启动后访问：
 - 健康检查: http://localhost:8080/actuator/health
 - API 文档: http://localhost:8080/doc.html
-- AI 对话: http://localhost:8080/ai/chat?prompt=你好
+- AI 对话: `POST http://localhost:8080/api/ai/chat?prompt=你好`（需配置 `OPENAI_API_KEY` 且 `sloth.ai.enabled: true`）
 
 > 💡 **推荐阅读顺序：**  
 > `common-core` → `starter-web` → `starter-redis` → `starter-mybatis` → `example-service`
@@ -280,28 +280,34 @@ docker-compose logs -f sloth-example
 ```yaml
 sloth:
   web:
-    unified-response: true        # 开启统一返回包装
-    unified-exception: true       # 开启全局异常处理
+    response-wrapper: true        # 统一响应包装
+    access-log-enabled: true      # 访问日志
+
+  xss:
+    enabled: true                 # XSS 过滤
 
   ai:
     enabled: false
     model: gpt-4o-mini
     default-system-prompt: "你是 Sloth Boot 内置 AI 助手"
-    
+
   redis:
-      lock:
-          prefix: "sloth:lock:"       # 分布式锁 Key 前缀
-          expire: 30                  # 默认锁超时（秒）
+    key-prefix: "sloth:"           # 业务 Key 统一前缀
+    lock-wait-time: 3             # 分布式锁等待时间（秒）
+    lock-lease-time: 30           # 分布式锁持有时长（秒）
 
   thread-pool:
-      enabled: true
-      core-size: 8
-      max-size: 32
-      queue-capacity: 500
+    enabled: true
+    virtual-enabled: false        # Java 21 虚拟线程
+    pools:
+      default:
+        core-size: 8
+        max-size: 32
+        queue-capacity: 1024
 
   idempotent:
-      enabled: true
-      expire: 60                    # Token 有效期（秒）
+    enabled: true
+    timeout: 10                   # 幂等 Token 有效期（秒）
 
 spring:
   ai:

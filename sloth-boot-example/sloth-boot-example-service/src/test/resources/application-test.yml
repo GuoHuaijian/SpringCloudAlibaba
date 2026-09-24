@@ -26,7 +26,8 @@ mybatis-plus:
 sloth:
   web:
     response-wrapper: false
-    xss-enabled: false
+  xss:
+    enabled: false
   redis:
     key-prefix: "test:"
   mybatis:
@@ -38,6 +39,5 @@ sloth:
   job:
     enabled: false
   thread-pool:
-    dynamic: false
   monitor:
     slow-api-enabled: false

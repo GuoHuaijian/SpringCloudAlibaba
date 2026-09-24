@@ -5,6 +5,42 @@
       "type": "com.sloth.boot.starter.oss.config.OssTypeEnum",
       "defaultValue": "minio",
       "description": "OSS 类型: local / minio / aliyun"
+    },
+    {
+      "name": "sloth.oss.endpoint",
+      "type": "java.lang.String",
+      "description": "OSS 服务端点。"
+    },
+    {
+      "name": "sloth.oss.access-key",
+      "type": "java.lang.String",
+      "description": "访问密钥 AccessKey。"
+    },
+    {
+      "name": "sloth.oss.secret-key",
+      "type": "java.lang.String",
+      "description": "访问密钥 SecretKey。"
+    },
+    {
+      "name": "sloth.oss.bucket-name",
+      "type": "java.lang.String",
+      "description": "存储桶名称。"
+    },
+    {
+      "name": "sloth.oss.region",
+      "type": "java.lang.String",
+      "description": "地域标识。"
+    },
+    {
+      "name": "sloth.oss.domain",
+      "type": "java.lang.String",
+      "description": "自定义访问域名。"
+    },
+    {
+      "name": "sloth.oss.presigned-url-expiry",
+      "type": "java.lang.Integer",
+      "defaultValue": 60,
+      "description": "预签名 URL 有效期（分钟）。"
     }
   ]
 }

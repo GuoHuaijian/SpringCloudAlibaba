@@ -61,4 +61,4 @@ SlothBoot 使用 `sloth.*` 配置前缀，部分 Spring Boot 原生配置可简�
 
 1. `sloth.mybatis.encrypt-key` 变为必填配置（如果使用了加密字段处理器）
 2. `AuthAutoConfiguration` 不再使用 `@ComponentScan`，`DefaultStpInterface` 改为显式 `@Bean` 注册
-3. `RedisBloomFilter` 构造函数新增 `name` 参数，可通过 `sloth.redis.bloom.name` 配置
+3. `RedisBloomFilter` 构造函数新增 `name` 参数，可通过 `sloth.redis.bloom-filter.name` 配置
