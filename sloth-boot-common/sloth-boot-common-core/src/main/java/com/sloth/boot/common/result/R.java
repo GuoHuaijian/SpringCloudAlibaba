@@ -176,6 +176,9 @@ public class R<T> implements Serializable {
 
     /**
      * 从异常构建失败响应
+     * <p>
+     * 非 {@link BaseException} 的异常统一返回内部错误提示，避免将内部异常消息
+     * （可能含 SQL、连接串、类名等敏感信息）暴露给调用方；原始消息请记录在服务端日志。
      *
      * @param throwable 异常
      * @param <T>       数据类型
@@ -188,7 +191,7 @@ public class R<T> implements Serializable {
             r.setMsg(baseEx.getMessage());
         } else {
             r.setCode(GlobalErrorCode.INTERNAL_ERROR.getCode());
-            r.setMsg(throwable.getMessage() != null ? throwable.getMessage() : I18nMessages.getMessage("sloth.error.internal"));
+            r.setMsg(I18nMessages.getMessage("sloth.error.internal"));
         }
         return r;
     }

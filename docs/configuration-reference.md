@@ -31,7 +31,7 @@ Redis 模块配置。
 | `sloth.redis.key-prefix` | `String` | `sloth:` | 统一业务 key 前缀 |
 | `sloth.redis.lock-wait-time` | `long` | `3` | 分布式锁默认等待时间（秒） |
 | `sloth.redis.lock-lease-time` | `long` | `30` | 分布式锁默认租约时间（秒） |
-| `sloth.redis.enable-type-info` | `boolean` | `true` | 是否携带类型信息进行 JSON 序列化 |
+| `sloth.redis.enable-type-info` | `boolean` | `false` | 是否携带类型信息进行 JSON 序列化（默认关闭，开启后仅允许白名单包前缀） |
 | `sloth.redis.null-value-expire-seconds` | `long` | `60` | 空值缓存时间（秒） |
 | **多级缓存** | | | |
 | `sloth.redis.multi-cache.enabled` | `boolean` | `false` | 是否启用多级缓存（Caffeine + Redis） |

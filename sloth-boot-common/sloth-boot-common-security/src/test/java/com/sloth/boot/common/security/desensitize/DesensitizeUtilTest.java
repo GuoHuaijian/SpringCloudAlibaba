@@ -35,4 +35,59 @@ class DesensitizeUtilTest {
         assertThat(DesensitizeUtil.idCard("")).isEmpty();
         assertThat(DesensitizeUtil.idCard(null)).isNull();
     }
+
+    @Test
+    @DisplayName("标准 11 位手机号保留前3后4")
+    void mobileStandard() {
+        assertThat(DesensitizeUtil.mobilePhone("13812345678")).isEqualTo("138****5678");
+    }
+
+    @Test
+    @DisplayName("非 11 位手机号不泄露明文")
+    void mobileNonStandardLength() {
+        assertThat(DesensitizeUtil.mobilePhone("12345")).isEqualTo("1****");
+        assertThat(DesensitizeUtil.mobilePhone("123")).isEqualTo("***");
+        assertThat(DesensitizeUtil.mobilePhone("12345678901234")).isEqualTo("123****1234");
+    }
+
+    @Test
+    @DisplayName("本地部分含 + 的邮箱仍被脱敏")
+    void emailWithPlusTag() {
+        assertThat(DesensitizeUtil.email("john+tag@example.com")).isEqualTo("j****@example.com");
+    }
+
+    @Test
+    @DisplayName("含点号的本地部分邮箱仍被脱敏")
+    void emailWithDot() {
+        assertThat(DesensitizeUtil.email("john.doe@example.com")).isEqualTo("j****@example.com");
+    }
+
+    @Test
+    @DisplayName("无 @ 分隔符的输入不泄露明文")
+    void emailWithoutAtSign() {
+        assertThat(DesensitizeUtil.email("not-an-email")).isEqualTo("n****");
+        assertThat(DesensitizeUtil.email("a")).isEqualTo("a");
+    }
+
+    @Test
+    @DisplayName("19 位银行卡号仅保留前4后4")
+    void bankCard19Digits() {
+        assertThat(DesensitizeUtil.bankCard("6222111122223333444")).isEqualTo("6222****3444");
+    }
+
+    @Test
+    @DisplayName("过短银行卡号完全遮蔽")
+    void bankCardTooShort() {
+        assertThat(DesensitizeUtil.bankCard("1234567")).isEqualTo("*******");
+        assertThat(DesensitizeUtil.bankCard("12345678")).isEqualTo("1234****5678");
+    }
+
+    @Test
+    @DisplayName("空值原样返回")
+    void blankInputs() {
+        assertThat(DesensitizeUtil.mobilePhone("")).isEmpty();
+        assertThat(DesensitizeUtil.mobilePhone(null)).isNull();
+        assertThat(DesensitizeUtil.email("")).isEmpty();
+        assertThat(DesensitizeUtil.bankCard("")).isEmpty();
+    }
 }

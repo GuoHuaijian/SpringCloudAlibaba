@@ -1,5 +1,7 @@
 package com.sloth.boot.common.result;
 
+import com.sloth.boot.common.exception.GlobalErrorCode;
+import com.sloth.boot.common.exception.SystemException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -74,5 +76,22 @@ class RTest {
     void traceId_nullWhenNoContext() {
         R<Void> r = R.ok();
         assertThat(r.getTraceId()).isNull();
+    }
+
+    @Test
+    @DisplayName("from(非业务异常) 不暴露内部异常消息")
+    void from_genericExceptionHidesInternalMessage() {
+        R<Void> r = R.from(new IllegalStateException("jdbc:mysql://secret-host:3306/db password=123"));
+        assertThat(r.getCode()).isEqualTo(GlobalErrorCode.INTERNAL_ERROR.getCode());
+        assertThat(r.getMsg()).isNotBlank();
+        assertThat(r.getMsg()).doesNotContain("secret-host");
+        assertThat(r.getMsg()).doesNotContain("123");
+    }
+
+    @Test
+    @DisplayName("from(BaseException) 保留业务异常消息")
+    void from_baseExceptionKeepsMessage() {
+        R<Void> r = R.from(new SystemException(GlobalErrorCode.INTERNAL_ERROR, "业务提示信息"));
+        assertThat(r.getMsg()).isEqualTo("业务提示信息");
     }
 }

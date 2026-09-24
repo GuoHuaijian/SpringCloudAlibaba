@@ -7,6 +7,12 @@
       "description": "是否启用监控 starter。"
     },
     {
+      "name": "sloth.monitor.expose-endpoints",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "是否自动将监控相关 Actuator 端点合并进 management.endpoints.web.exposure.include。默认关闭，避免覆盖用户显式配置、意外暴露敏感端点。"
+    },
+    {
       "name": "sloth.monitor.slow-api-enabled",
       "type": "java.lang.Boolean",
       "defaultValue": true,

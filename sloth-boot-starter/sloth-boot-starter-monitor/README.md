@@ -98,7 +98,23 @@ sloth:
 
 ### Actuator 端点
 
-启动后自动暴露以下端点：
+监控相关端点需通过标准配置或 `sloth.monitor.expose-endpoints=true`（默认关闭，避免覆盖用户显式配置）暴露：
+
+```yaml
+sloth:
+  monitor:
+    expose-endpoints: true   # 将下列监控端点合并进 exposure.include
+```
+
+或使用标准 Spring Boot 配置：
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,appInfo,jvmInfo,metricsSummary,threadPools
+```
 
 | 端点 | 说明 |
 |------|------|

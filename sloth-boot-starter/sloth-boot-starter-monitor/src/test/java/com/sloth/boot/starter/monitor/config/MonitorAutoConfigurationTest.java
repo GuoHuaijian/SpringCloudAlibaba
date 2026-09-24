@@ -55,4 +55,18 @@ class MonitorAutoConfigurationTest {
                 assertThat(context.getBeansOfType(RestTemplate.class)).isNotEmpty();
             });
     }
+
+    @Test
+    @DisplayName("默认不注册 Actuator 端点暴露后处理器")
+    void exposurePostProcessorDisabledByDefault() {
+        contextRunner.run(context ->
+            assertThat(context).doesNotHaveBean("monitorActuatorExposurePostProcessor"));
+    }
+
+    @Test
+    @DisplayName("sloth.monitor.expose-endpoints=true 时注册端点暴露后处理器")
+    void exposurePostProcessorEnabledByProperty() {
+        contextRunner.withPropertyValues("sloth.monitor.expose-endpoints=true").run(context ->
+            assertThat(context).hasBean("monitorActuatorExposurePostProcessor"));
+    }
 }

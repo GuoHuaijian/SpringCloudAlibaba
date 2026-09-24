@@ -41,12 +41,15 @@ public class DesensitizeValueSerializerModifier extends ValueSerializerModifier 
     }
 
     private Desensitize findFieldAnnotation(BeanDescription beanDesc, String fieldName) {
-        try {
-            return beanDesc.getBeanClass()
-                    .getDeclaredField(fieldName)
-                    .getAnnotation(Desensitize.class);
-        } catch (NoSuchFieldException e) {
-            return null;
+        // 沿继承链查找字段，避免父类字段上的 @Desensitize 静默失效
+        Class<?> current = beanDesc.getBeanClass();
+        while (current != null && current != Object.class) {
+            try {
+                return current.getDeclaredField(fieldName).getAnnotation(Desensitize.class);
+            } catch (NoSuchFieldException ignored) {
+                current = current.getSuperclass();
+            }
         }
+        return null;
     }
 }

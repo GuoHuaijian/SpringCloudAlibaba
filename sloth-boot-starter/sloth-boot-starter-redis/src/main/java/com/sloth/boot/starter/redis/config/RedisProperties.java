@@ -35,8 +35,10 @@ public class RedisProperties {
 
     /**
      * 是否携带类型信息进行 JSON 序列化。
+     * <p>
+     * 默认关闭以避免不安全的多态反序列化；开启时仅允许白名单包前缀（java.lang/java.util/java.time/com.sloth）。
      */
-    private boolean enableTypeInfo = true;
+    private boolean enableTypeInfo = false;
 
     /**
      * 空值缓存时间，单位秒。

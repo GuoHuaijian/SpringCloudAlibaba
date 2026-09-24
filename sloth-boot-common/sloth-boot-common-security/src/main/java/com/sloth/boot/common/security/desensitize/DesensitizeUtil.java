@@ -16,15 +16,23 @@ public final class DesensitizeUtil {
 
     /**
      * 手机号脱敏（保留前3后4）
+     * <p>
+     * 使用字符级处理而非正则，避免长度异常的输入（非 11 位）不匹配正则而明文泄露。
      *
      * @param mobile 手机号
      * @return 脱敏后的手机号
      */
     public static String mobilePhone(String mobile) {
-        if (StrUtil.isBlank(mobile) || mobile.length() != 11) {
+        if (StrUtil.isBlank(mobile)) {
             return mobile;
         }
-        return mobile.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+        if (mobile.length() <= 3) {
+            return "*".repeat(mobile.length());
+        }
+        if (mobile.length() <= 7) {
+            return mobile.charAt(0) + "*".repeat(mobile.length() - 1);
+        }
+        return mobile.substring(0, 3) + "****" + mobile.substring(mobile.length() - 4);
     }
 
     /**
@@ -44,7 +52,9 @@ public final class DesensitizeUtil {
     }
 
     /**
-     * 邮箱脱敏（保留@前首字母）
+     * 邮箱脱敏（保留@前首字母与域名部分）
+     * <p>
+     * 使用字符级处理而非正则，避免本地部分含 {@code +}、{@code .} 等非单词字符时不匹配正则而明文泄露。
      *
      * @param email 邮箱
      * @return 脱敏后的邮箱
@@ -53,24 +63,30 @@ public final class DesensitizeUtil {
         if (StrUtil.isBlank(email)) {
             return email;
         }
-        int atIndex = email.indexOf("@");
-        if (atIndex <= 1) {
-            return email;
+        int atIndex = email.indexOf('@');
+        if (atIndex < 1) {
+            // 无有效 @ 分隔符时，仅保留首字符，其余全部遮蔽
+            return email.length() == 1 ? email : email.charAt(0) + "****";
         }
-        return email.replaceAll("(\\w{1})\\w*(\\@\\w+\\.\\w+)", "$1****$2");
+        return email.charAt(0) + "****" + email.substring(atIndex);
     }
 
     /**
-     * 银行卡号脱敏（保留后4位）
+     * 银行卡号脱敏（保留前4后4）
+     * <p>
+     * 使用字符级处理而非正则，避免 19 位等超长卡号超出正则窗口而泄露尾部明文。
      *
      * @param bankCard 银行卡号
      * @return 脱敏后的银行卡号
      */
     public static String bankCard(String bankCard) {
-        if (StrUtil.isBlank(bankCard) || bankCard.length() < 4) {
+        if (StrUtil.isBlank(bankCard)) {
             return bankCard;
         }
-        return bankCard.replaceAll("(\\d{4})\\d{0,10}(\\d{4})", "$1****$2");
+        if (bankCard.length() < 8) {
+            return "*".repeat(bankCard.length());
+        }
+        return bankCard.substring(0, 4) + "****" + bankCard.substring(bankCard.length() - 4);
     }
 
     /**

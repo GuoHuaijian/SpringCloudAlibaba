@@ -32,8 +32,14 @@ public class RedisSerializerConfig {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         if (redisProperties.isEnableTypeInfo()) {
+            // 默认类型信息开启时仅允许安全的基础类型与本框架包前缀，防止反序列化 gadget 注入
             objectMapper.activateDefaultTyping(
-                BasicPolymorphicTypeValidator.builder().allowIfSubType(Object.class).build(),
+                BasicPolymorphicTypeValidator.builder()
+                    .allowIfSubType("java.lang.")
+                    .allowIfSubType("java.util.")
+                    .allowIfSubType("java.time.")
+                    .allowIfSubType("com.sloth.")
+                    .build(),
                 ObjectMapper.DefaultTyping.NON_FINAL);
         }
         return new GenericJackson2JsonRedisSerializer(objectMapper);

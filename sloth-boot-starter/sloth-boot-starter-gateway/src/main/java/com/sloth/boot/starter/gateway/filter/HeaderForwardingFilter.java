@@ -35,6 +35,9 @@ public class HeaderForwardingFilter implements GlobalFilter, Ordered {
 
     /**
      * 执行认证与用户透传。
+     * <p>
+     * 客户端传入的 {@code X-User-Id}/{@code X-Username}/{@code X-Inner-Call} 身份头一律丢弃并由网关
+     * 覆盖写入，防止身份伪造；白名单路径跳过 token 校验，但同样执行身份头清洗。
      *
      * @param exchange 请求上下文
      * @param chain    过滤器链
@@ -43,33 +46,29 @@ public class HeaderForwardingFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getPath().value();
-        if (isWhiteList(path)) {
-            return chain.filter(exchange);
-        }
-        String token = exchange.getRequest().getHeaders().getFirst(HeaderConstant.TOKEN);
-        if (token == null || token.isBlank()) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+        boolean whiteListed = isWhiteList(path);
+        if (!whiteListed) {
+            String token = exchange.getRequest().getHeaders().getFirst(HeaderConstant.TOKEN);
+            if (token == null || token.isBlank()) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
         }
         ServerHttpRequest.Builder builder = exchange.getRequest().mutate();
+        // 丢弃入站身份头，防止客户端伪造身份
+        builder.headers(headers -> {
+            headers.remove(HeaderConstant.USER_ID);
+            headers.remove(HeaderConstant.USERNAME);
+            headers.remove(HeaderConstant.INNER_CALL);
+        });
         builder.header(HeaderConstant.INNER_CALL, DEFAULT_INNER_CALL_VALUE);
-        builder.header(
-            HeaderConstant.USER_ID,
-            defaultHeader(exchange, HeaderConstant.USER_ID, DEFAULT_USER_ID)
-        );
-        builder.header(
-            HeaderConstant.USERNAME,
-            defaultHeader(exchange, HeaderConstant.USERNAME, DEFAULT_USERNAME)
-        );
-        if (exchange.getRequest().getHeaders().getFirst(HeaderConstant.TENANT_ID) != null) {
-            builder.header(HeaderConstant.TENANT_ID, exchange.getRequest().getHeaders().getFirst(HeaderConstant.TENANT_ID));
+        builder.header(HeaderConstant.USER_ID, DEFAULT_USER_ID);
+        builder.header(HeaderConstant.USERNAME, DEFAULT_USERNAME);
+        String tenantId = exchange.getRequest().getHeaders().getFirst(HeaderConstant.TENANT_ID);
+        if (tenantId != null && !tenantId.isBlank()) {
+            builder.header(HeaderConstant.TENANT_ID, tenantId);
         }
         return chain.filter(exchange.mutate().request(builder.build()).build());
-    }
-
-    private String defaultHeader(ServerWebExchange exchange, String headerName, String defaultValue) {
-        String headerValue = exchange.getRequest().getHeaders().getFirst(headerName);
-        return headerValue == null ? defaultValue : headerValue;
     }
 
     private boolean isWhiteList(String path) {

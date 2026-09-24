@@ -27,8 +27,8 @@
     {
       "name": "sloth.redis.enable-type-info",
       "type": "java.lang.Boolean",
-      "defaultValue": true,
-      "description": "Whether to include type info in JSON serialization."
+      "defaultValue": false,
+      "description": "Whether to include type info in JSON serialization. Disabled by default for safe deserialization; when enabled only whitelisted package prefixes are allowed."
     },
     {
       "name": "sloth.redis.null-value-expire-seconds",

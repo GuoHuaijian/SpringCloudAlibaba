@@ -253,11 +253,15 @@ public class MonitorAutoConfiguration {
 
     /**
      * 自定义 Actuator 端点暴露配置。
+     * <p>
+     * 默认关闭（{@code sloth.monitor.expose-endpoints=true} 显式开启），开启后将监控相关端点
+     * 合并进 {@code management.endpoints.web.exposure.include}，不覆盖用户已有的显式配置。
      *
      * @return Bean 后处理器
      */
     @Bean
     @ConditionalOnClass(WebEndpointProperties.class)
+    @ConditionalOnProperty(prefix = "sloth.monitor", name = "expose-endpoints", havingValue = "true")
     @ConditionalOnMissingBean(name = "monitorActuatorExposurePostProcessor")
     public static BeanPostProcessor monitorActuatorExposurePostProcessor() {
         return new BeanPostProcessor() {

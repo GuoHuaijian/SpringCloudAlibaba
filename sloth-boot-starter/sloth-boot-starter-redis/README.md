@@ -27,7 +27,7 @@
 | `sloth.redis.key-prefix` | String | `sloth:` | 统一业务 key 前缀 |
 | `sloth.redis.lock-wait-time` | long | `3` | 分布式锁默认等待时间（秒） |
 | `sloth.redis.lock-lease-time` | long | `30` | 分布式锁默认租约时间（秒） |
-| `sloth.redis.enable-type-info` | boolean | `true` | JSON 序列化时是否携带类型信息 |
+| `sloth.redis.enable-type-info` | boolean | `false` | JSON 序列化时是否携带类型信息（默认关闭，开启后仅允许白名单包前缀） |
 | `sloth.redis.null-value-expire-seconds` | long | `60` | 空值缓存过期时间（秒） |
 
 ## 核心组件
