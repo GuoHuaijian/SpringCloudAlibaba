@@ -62,7 +62,7 @@
         <spring-ai.version>1.1.6</spring-ai.version>
 
         <!-- Database -->
-        <mybatis-plus.version>3.5.6</mybatis-plus.version>
+        <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <dynamic-datasource.version>4.3.0</dynamic-datasource.version>
         <druid.version>1.2.21</druid.version>
 
