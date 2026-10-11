@@ -28,7 +28,7 @@
     <description>Sloth Boot 可观测性演示模块 - OpenTelemetry + Tempo + Prometheus + Loki + Grafana</description>
 
     <properties>
-        <opentelemetry.version>1.42.0</opentelemetry.version>
+        <opentelemetry.version>1.62.0</opentelemetry.version>
     </properties>
 
     <dependencies>
