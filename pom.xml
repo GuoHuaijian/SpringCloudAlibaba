@@ -75,7 +75,7 @@
         <knife4j.version>4.5.0</knife4j.version>
         <xxl-job.version>2.4.1</xxl-job.version>
         <easyexcel.version>4.0.3</easyexcel.version>
-        <hutool.version>5.8.26</hutool.version>
+        <hutool.version>5.8.46</hutool.version>
         <guava.version>33.0.0-jre</guava.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok.version>1.18.38</lombok.version>
